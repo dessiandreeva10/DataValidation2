@@ -60,7 +60,7 @@ public class ValidateUserInfo {
 	
 	private static String namePattern = "[A-Z]+[a-z]{1,15} [A-Z]+[a-z]{1,15} [A-Z]+[a-z]{1,15}";
 	private static String EGNPattern = "[0-9]{10}";
-	private static String BULSTATPattern = "[BG]{2}[0-9]{9}";
+	private static String BULSTATPattern = "[0-9]{9}";
 	private static String FKPattern = "[0-9]{2}[-]{1}[0-9]{3}";
 	private static String emailPattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
 	
@@ -81,10 +81,11 @@ public class ValidateUserInfo {
 		if(ret == true){
 			v.setName(name);
 		}else{
-			return "The name is not valid!";
+			v.setName(name);
+			return " is not a valid name!";
 		}
 		
-		return "The name is valid!";	
+		return " is a valid name!";	
 	}
 	
 	public String askForEGN(Scanner sc, Pattern p, Matcher m, ValidateUserInfo v){
@@ -100,10 +101,11 @@ public class ValidateUserInfo {
 		if(ret == true){
 			v.setEGN(EGN);
 		}else{
-			return "The EGN is not valid!";
+			v.setEGN(EGN);
+			return " is not a valid EGN!";
 		}
 		
-		return "The EGN is valid!";	
+		return " is a valid EGN!";	
 	}
 	
 	public String askForBulstat(Scanner sc, Pattern p, Matcher m, ValidateUserInfo v){
@@ -119,10 +121,11 @@ public class ValidateUserInfo {
 		if(ret == true){
 			v.setBulstat(BULSTAT);
 		}else{
-			return "The BULSTAT is not valid!";
+			v.setBulstat(BULSTAT);
+			return " is not a valid Bulstat!";
 		}
 		
-		return "The BULSTAT is valid!";	
+		return " is a valid Bulstat!";	
 	}
 	
 	public String askForFK(Scanner sc, Pattern p, Matcher m, ValidateUserInfo v){
@@ -138,10 +141,11 @@ public class ValidateUserInfo {
 		if(ret == true){
 			v.setFK(FK);
 		}else{
-			return "The Facility key is not valid!";
+			v.setFK(FK);
+			return " is not a valid facility key!";
 		}
 		
-		return "The Facility key is correct!";	
+		return " is a valid facility key!";	
 	}
 	
 	public String askForEmail(Scanner sc, Pattern p, Matcher m, ValidateUserInfo v){
@@ -157,17 +161,33 @@ public class ValidateUserInfo {
 		if(ret == true){
 			v.setEmail(email);
 		}else{
-			return "The email is not valid!";
+			v.setEmail(email);
+			return "is not a valid e-mail!";
 		}
 		
-		return "The email is valid!";	
+		return " is a valid e-mail!";	
 	}
 	
-	public static void printResult(String[] mesg){
+	public static void printResult( ValidateUserInfo v, String[] mesg, String user){
 		int i = 0;
 		
 		for(i = 0 ; i < mesg.length; i++){
-			System.out.println(mesg[i]);
+			
+			if(i == 0){
+				System.out.println(v.getName() + mesg[i]);
+			} else if(i == 1){
+				
+				if(user.equals("company")){
+					System.out.println(v.getBulstat() + mesg[i]);
+				} else if(user.equals("person")){
+					System.out.println(v.getEGN() + mesg[i]);	
+				}
+				
+			}else if(i == 2){
+				System.out.println(v.getFK() + mesg[i]);
+			}else if(i == 3){
+				System.out.println(v.getEmail() + mesg[i]);
+			}
 		}
 	}
 	
@@ -189,7 +209,7 @@ public class ValidateUserInfo {
 					retMesg[1] = v.askForEGN(sc, pattern, matcher, v);
 					retMesg[2] = v.askForFK(sc, pattern, matcher, v);
 					retMesg[3] = v.askForEmail(sc, pattern, matcher, v);
-					printResult(retMesg);
+					printResult(v, retMesg, begin);
 				}catch(Exception e){
 					System.out.println("Something went wrong!");
 				}
@@ -199,7 +219,7 @@ public class ValidateUserInfo {
 					retMesg[1] = v.askForBulstat(sc, pattern, matcher, v);
 					retMesg[2] = v.askForFK(sc, pattern, matcher, v);
 					retMesg[3] = v.askForEmail(sc, pattern, matcher, v);
-					printResult(retMesg);
+					printResult(v, retMesg, begin);
 				}catch(Exception e){
 					System.out.println("Something went wrong!");
 				}
